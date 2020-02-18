@@ -5,7 +5,7 @@ const request = require('superagent');
 // do not modify this URL!
 const URL = 'https://rickandmortyapi.com/api/episode';
 
-// use .filter and .map to create an array of strings of episode names for episodes that have jerry (character id 5) in them)
+// use filter and .map to create an array of strings of episode names for episodes that have jerry (character id 5) in them)
 
 const getEpisodesNamesWithSomeChar = async (someId) => {
   const data = await request.get(URL);
