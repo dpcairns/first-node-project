@@ -6,3 +6,5 @@
 1. add error handling
 1. wire my `location` endpoint to locationiq api
 1. HIDE KEY
+1. wire my `weather` endpoint to darksky api
+1. HIDE WEATHER KEY

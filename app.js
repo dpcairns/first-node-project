@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const weather = require('./darksky.js');
 const request = require('superagent');
 const cors = require('cors');
 const app = express();
@@ -38,20 +37,26 @@ app.get('/location', async(req, res, next) => {
     }
 });
 
-const getWeatherData = (lat, lng) => {
-    return weather.daily.data.map(forecast => {
+const getWeatherData = async(lat, lng) => {
+    const weather = await request.get(`https://api.darksky.net/forecast/${process.env.WEATHER_KEY}/${lat},${lng}`);
+
+    return weather.body.daily.data.map(forecast => {
         return {
             forecast: forecast.summary,
             time: new Date(forecast.time * 1000),
         };
-    })
+    });
 } ;
-app.get('/weather', (req, res) => {
+app.get('/weather', async(req, res, next) => {
     // use the lat and lng from earlier to get weather data for the selected area
-    const portlandWeather = getWeatherData(lat, lng);
-    
-    // res.json that weather data in the appropriate form
-    res.json(portlandWeather);
+    try {
+        const portlandWeather = await getWeatherData(lat, lng);
+        
+        // res.json that weather data in the appropriate form
+        res.json(portlandWeather);
+    } catch (err) {
+        next(err);
+    }
 });
 
 app.get('*', (req, res) => res.send('404!!!!!!'))
