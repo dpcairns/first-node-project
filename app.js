@@ -24,7 +24,7 @@ app.get('/about', (request, respond) => respond.json({
     number: Math.random()
 }));
 
-app.get('/get-episodes/:characterId/:another-one/', async (request, respond) => {
+app.get('/get-episodes/:latitude/:longitude/', async (request, respond) => {
     const episodes = await getEpisodesNamesWithSomeChar(Number(request.params.characterId));
 
     respond.json({
