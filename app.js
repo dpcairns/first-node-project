@@ -1,9 +1,11 @@
 const express = require('express');
 const data = require('./geo.js');
 const weather = require('./darksky.js');
+const cors = require('cors');
 const app = express();
 // const request = require('superagent');
 
+app.use(cors());
 app.get('/', (request, respond) => respond.send('Jello World!'));
 
 app.get('/location', (request, respond) => {
