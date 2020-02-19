@@ -8,9 +8,21 @@ const app = express();
 app.use(cors());
 app.get('/', (request, respond) => respond.send('Jello World!'));
 
+// initialize the global state of lat and lng so it is accessbile in other routes
+let lat;
+let lng; 
+
 app.get('/location', (request, respond) => {
+    // ins www.cool-api.com?search=portland, `location` will be portland
+    const location = request.query.search;
+
+    console.log('using location . . .', location);
     const cityData = data.results[0];
 
+    // update the global state of lat and lng so it is accessbile in other routes
+    lat = cityData.geometry.location.lat;
+    lng = cityData.geometry.location.lng;
+    
     respond.json({
         formatted_query: cityData.formatted_address,
         latitude: cityData.geometry.location.lat,
@@ -22,13 +34,13 @@ const getWeatherData = (lat, lng) => {
     return weather.daily.data.map(forecast => {
         return {
             forecast: forecast.summary,
-            time: new Date(forecast.time),
+            time: new Date(forecast.time * 1000),
         };
     })
 } ;
 app.get('/weather', (req, res) => {
     // use the lat and lng from earlier to get weather data for the selected area
-    const portlandWeather = getWeatherData(/*lat*lng*/);
+    const portlandWeather = getWeatherData(lat, lng);
     
     // res.json that weather data in the appropriate form
     res.json(portlandWeather);
