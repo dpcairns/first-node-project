@@ -59,6 +59,18 @@ app.get('/weather', async(req, res, next) => {
     }
 });
 
+app.get('/yelp-THIS_WILL_NOT_WORK', async(req, res, next) => {
+    try {
+        const yelpStuff = await request
+            .get(`api.yelp.com/${lat},${lng}`)
+            .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`);
+
+        res.json(yelpStuff);
+    } catch (err) {
+        next(err);
+    }
+});
+
 app.get('*', (req, res) => res.send('404!!!!!!'))
 
 module.exports = {
